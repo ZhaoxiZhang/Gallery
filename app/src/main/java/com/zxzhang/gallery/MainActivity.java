@@ -46,8 +46,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mToolbar = (Toolbar)findViewById(R.id.toolbar);
-        setSupportActionBar(mToolbar);
+
+        initToolbar();
 
         mRvAlubum = (RecyclerView)findViewById(R.id.rv_album);
 
@@ -99,15 +99,20 @@ public class MainActivity extends AppCompatActivity {
                     public void accept(Permission permission) throws Exception {
                         if (permission.granted){
                             Log.d(TAG, "accept: 成功");
-                            Toast.makeText(MainActivity.this,"权限授予成功",Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(MainActivity.this,"权限授予成功",Toast.LENGTH_SHORT).show();
                         }else{
                             Log.d(TAG, "accept: 失败");
-                            Toast.makeText(MainActivity.this,"权限授予失败",Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(MainActivity.this,"权限授予失败",Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
     }
 
+
+    private void initToolbar(){
+        mToolbar = (Toolbar)findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
+    }
 
     private void getAlbums(){
         new Thread(new Runnable() {

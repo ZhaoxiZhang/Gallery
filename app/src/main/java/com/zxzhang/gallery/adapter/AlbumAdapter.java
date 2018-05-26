@@ -1,6 +1,8 @@
 package com.zxzhang.gallery.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -12,8 +14,10 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.zxzhang.gallery.R;
+import com.zxzhang.gallery.activities.PhotoActivity;
 import com.zxzhang.gallery.data.AlbumBean;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -28,12 +32,12 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder>{
     private HashMap<String,List<String>>mAlbumMap;
 
     static class ViewHolder extends RecyclerView.ViewHolder{
-        CardView cardView;
+        CardView albumView;
         ImageView albumImage;
         TextView albumName;
         public ViewHolder(View view){
             super(view);
-            cardView = (CardView)view;
+            albumView = (CardView)view;
             albumImage = (ImageView)view.findViewById(R.id.album_image);
             albumName = (TextView)view.findViewById(R.id.album_name);
         }
@@ -50,7 +54,23 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder>{
             mContext = parent.getContext();
         }
         View view = LayoutInflater.from(mContext).inflate(R.layout.album_item,parent,false);
-        return new ViewHolder(view);
+        final ViewHolder holder = new ViewHolder(view);
+
+        holder.albumView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int position = holder.getAdapterPosition();
+                List<String>photoPathList = mAlbumMap.get(mAlbumList.get(position).getAlbumFolderName());
+                Log.d(TAG, "onClick: AlbumAdapter " + photoPathList.size());
+                Intent intent = new Intent(mContext, PhotoActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putStringArrayList("photoPathList",(ArrayList)photoPathList);
+                intent.putExtras(bundle);
+                mContext.startActivity(intent);
+            }
+        });
+
+        return holder;
     }
 
     @Override

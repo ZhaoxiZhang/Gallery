@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.zxzhang.gallery.MainActivity">
+    tools:context="com.zxzhang.gallery.activities.PhotoActivity">
 
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
@@ -28,11 +28,12 @@
         </android.support.design.widget.AppBarLayout>
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/rv_album"
+            android:id="@+id/rv_photo"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
     </android.support.design.widget.CoordinatorLayout>
+
 
 </LinearLayout>
