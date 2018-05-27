@@ -20,8 +20,13 @@
             android:id="@+id/album_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_margin="5dp"
+            android:layout_marginLeft="5dp"
+            android:textSize="16sp"/>
+        <TextView
+            android:id="@+id/album_photos_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
             android:textSize="16sp"/>
     </LinearLayout>
 

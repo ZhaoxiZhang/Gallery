@@ -35,11 +35,13 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder>{
         CardView albumView;
         ImageView albumImage;
         TextView albumName;
+        TextView albumPhotosCount;
         public ViewHolder(View view){
             super(view);
             albumView = (CardView)view;
             albumImage = (ImageView)view.findViewById(R.id.album_image);
             albumName = (TextView)view.findViewById(R.id.album_name);
+            albumPhotosCount = (TextView)view.findViewById(R.id.album_photos_count);
         }
     }
 
@@ -60,11 +62,15 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder>{
             @Override
             public void onClick(View v) {
                 int position = holder.getAdapterPosition();
-                List<String>photoPathList = mAlbumMap.get(mAlbumList.get(position).getAlbumFolderName());
+                String albumFolderName = mAlbumList.get(position).getAlbumFolderName();
+                Log.d(TAG, "onClick: zyzhangzyzhang " + albumFolderName);
+                List<String>photoPathList = mAlbumMap.get(albumFolderName);
+
                 Log.d(TAG, "onClick: AlbumAdapter " + photoPathList.size());
                 Intent intent = new Intent(mContext, PhotoActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putStringArrayList("photoPathList",(ArrayList)photoPathList);
+                bundle.putString("albumFolderName",albumFolderName);
                 intent.putExtras(bundle);
                 mContext.startActivity(intent);
             }
@@ -77,6 +83,7 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder>{
     public void onBindViewHolder(ViewHolder holder, int position) {
         AlbumBean albumBean = mAlbumList.get(position);
         holder.albumName.setText(albumBean.getAlbumFolderName());
+        holder.albumPhotosCount.setText(String.valueOf(albumBean.getImageAmount()));
         Glide.with(mContext)
                 .load(albumBean.getAlbumFolderPath())
                 .into(holder.albumImage);

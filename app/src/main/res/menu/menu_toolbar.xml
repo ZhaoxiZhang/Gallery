@@ -4,7 +4,15 @@
 
     <item
         android:id="@+id/tb_search"
+        android:icon="@drawable/search"
+        android:title="search"
         app:showAsAction="always" />
+
+    <item
+        android:id="@+id/tb_camera"
+        android:icon="@drawable/camera"
+        android:title="camera"
+        app:showAsAction="always"/>
 
     <item
         android:id="@+id/tb_settings"
