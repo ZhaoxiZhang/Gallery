@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.zxzhang.gallery.R;
-import com.zxzhang.gallery.activities.PhotoActivity;
+import com.zxzhang.gallery.activity.PhotoActivity;
 import com.zxzhang.gallery.data.AlbumBean;
 
 import java.util.ArrayList;

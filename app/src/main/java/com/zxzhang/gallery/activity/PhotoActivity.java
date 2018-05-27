@@ -1,4 +1,4 @@
-package com.zxzhang.gallery.activities;
+package com.zxzhang.gallery.activity;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -39,6 +39,7 @@ public class PhotoActivity extends AppCompatActivity {
         photoAdapter = new PhotoAdapter(getApplicationContext(),mPhotoPathList);
         mRvPhoto.setLayoutManager(layoutManager);
         mRvPhoto.setAdapter(photoAdapter);
+
     }
 
 
