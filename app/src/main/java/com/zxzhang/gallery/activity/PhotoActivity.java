@@ -11,18 +11,21 @@ import android.view.MenuItem;
 
 import com.zxzhang.gallery.R;
 import com.zxzhang.gallery.adapter.PhotoAdapter;
+import com.zxzhang.gallery.data.MediaBean;
 
 import java.util.List;
 
 public class PhotoActivity extends AppCompatActivity {
     private static final String TAG = "PhotoActivity";
-    private List<String> mPhotoPathList;
+    private List<MediaBean> mMediaList;
+    private List<String>mPhotoPathList;
     private Toolbar mToolbar;
     private Intent mIntent;
     private PhotoAdapter photoAdapter;
     private GridLayoutManager layoutManager;
     private RecyclerView mRvPhoto;
     private String mAlbumFolerName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,14 +35,13 @@ public class PhotoActivity extends AppCompatActivity {
 
 
         mIntent = getIntent();
-        mPhotoPathList = mIntent.getStringArrayListExtra("photoPathList");
+        mMediaList = mIntent.getParcelableArrayListExtra("mediaList");
         mAlbumFolerName = mIntent.getStringExtra("albumFolderName");
-        Log.d(TAG, "PhotoActivity onCreate: " + mPhotoPathList);
 
         initToolbar();
 
         layoutManager = new GridLayoutManager(PhotoActivity.this,3);
-        photoAdapter = new PhotoAdapter(getApplicationContext(),mPhotoPathList);
+        photoAdapter = new PhotoAdapter(getApplicationContext(),mMediaList);
         mRvPhoto.setLayoutManager(layoutManager);
         mRvPhoto.setAdapter(photoAdapter);
     }
@@ -63,4 +65,6 @@ public class PhotoActivity extends AppCompatActivity {
         }
         return true;
     }
+
+
 }

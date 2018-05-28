@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -23,6 +24,7 @@ import com.tbruyelle.rxpermissions2.Permission;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.zxzhang.gallery.adapter.AlbumAdapter;
 import com.zxzhang.gallery.data.AlbumBean;
+import com.zxzhang.gallery.data.MediaBean;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -38,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private final int SCAN_OK = 1;
     private Toolbar mToolbar;
     private DrawerLayout mDrawerLayout;
-    private HashMap<String,List<String>>mAlbumMap = new HashMap<>();
+    private HashMap<String,List<MediaBean>>mAlbumMap = new HashMap<>();
     private RecyclerView mRvAlubum;
     private AlbumAdapter albumAdapter;
     private List<AlbumBean>mAlbumList;
@@ -56,8 +58,19 @@ public class MainActivity extends AppCompatActivity {
 
         requestPermissions();
 
+        getUriColumns(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
         getAlbums();
 
+    }
+
+    private void getUriColumns(Uri uri){
+        Cursor cursor = getContentResolver().query(uri,null,null,null,null);
+        cursor.moveToFirst();
+        String[] cols = cursor.getColumnNames();
+        for (String name:cols){
+            Log.d(TAG, "getUriColumns: + name = " +  name);
+        }
     }
 
     private Handler handler = new Handler(){
@@ -137,46 +150,60 @@ public class MainActivity extends AppCompatActivity {
                         MediaStore.Images.Media.DATE_MODIFIED);
 
                 while (mCursor.moveToNext()){
-                    String imagePath = mCursor.getString(mCursor.getColumnIndex(MediaStore.Images.Media.DATA));
-                    String albumName = new File(imagePath).getParentFile().getName();
-                    Log.d(TAG, "run: imagePath = " + imagePath);
-                    Log.d(TAG, "run: albumName = " + albumName);
+                    MediaBean mediaBean = new MediaBean();
+
+                    String mediaPath = mCursor.getString(mCursor.getColumnIndex(MediaStore.Images.Media.DATA));
+                    String mediaMimeType = mCursor.getString(mCursor.getColumnIndex(MediaStore.Images.Media.MIME_TYPE));
+                    String mediaSize = mCursor.getString(mCursor.getColumnIndex(MediaStore.Images.Media.SIZE));
+                    String mediaDisplayName = mCursor.getString(mCursor.getColumnIndex(MediaStore.Images.Media.DISPLAY_NAME));
+                    String mediaDateTaken = mCursor.getString(mCursor.getColumnIndex(MediaStore.Images.Media.DATE_TAKEN));
+                    String mediaDateModified = mCursor.getString(mCursor.getColumnIndex(MediaStore.Images.Media.DATE_MODIFIED));
+                    String mediaDescription = mCursor.getString(mCursor.getColumnIndex(MediaStore.Images.Media.DESCRIPTION));
+                    //媒体详情信息
+                    mediaBean.setPath(mediaPath);
+                    mediaBean.setMimeType(mediaMimeType);
+                    mediaBean.setSize(mediaSize);
+                    mediaBean.setDispalyName(mediaDisplayName);
+                    mediaBean.setDateTaken(mediaDateTaken);
+                    mediaBean.setDateModified(mediaDateModified);
+                    mediaBean.setDescription(mediaDescription);
+
+                    //获取相册名字
+                    String albumName = new File(mediaPath).getParentFile().getName();
+
                     if (!mAlbumMap.containsKey(albumName)){
-                        List<String>imagesList = new ArrayList<>();
-                        imagesList.add(imagePath);
+                        List<MediaBean>imagesList = new ArrayList<>();
+                        imagesList.add(mediaBean);
                         mAlbumMap.put(albumName,imagesList);
                     }else{
-                        mAlbumMap.get(albumName).add(imagePath);
+                        mAlbumMap.get(albumName).add(mediaBean);
                     }
-                    Log.d(TAG, "run: size = " + mAlbumMap.size());
+
                 }
                 mCursor.close();
 
                 handler.sendEmptyMessage(SCAN_OK);
 
-                Log.d(TAG, "run: size = " + mAlbumMap.size());
             }
         }).start();
     }
 
 
 
-    private List<AlbumBean>getAlbumInfoToList(HashMap<String,List<String>>albumMap){
+    private List<AlbumBean>getAlbumInfoToList(HashMap<String,List<MediaBean>>albumMap){
         if (mAlbumMap.size() == 0){
             Log.d(TAG, "getAlbumInfoToList: zyzhang size = " + mAlbumMap.size());
             return null;
         }
         List<AlbumBean>albumList = new ArrayList<>();
-        Iterator<Map.Entry<String,List<String>>>iterator = albumMap.entrySet().iterator();
+        Iterator<Map.Entry<String,List<MediaBean>>>iterator = albumMap.entrySet().iterator();
         while (iterator.hasNext()){
-            Map.Entry<String,List<String>>entry = iterator.next();
+            Map.Entry<String,List<MediaBean>>entry = iterator.next();
             AlbumBean albumBean = new AlbumBean();
             String key = entry.getKey();
-            List<String>value = entry.getValue();
+            List<MediaBean>value = entry.getValue();
             albumBean.setAlbumFolderName(key);
-            albumBean.setAlbumFolderPath(value.get(0));
-            Log.d(TAG, "getAlbumInfoToList: " + albumBean.getAlbumFolderPath());
-            Log.d(TAG, "getAlbumInfoToList: " + albumBean.getAlbumFolderName());
+            albumBean.setAlbumFolderPath(value.get(0).getPath());
             albumBean.setImageAmount(value.size());
             albumList.add(albumBean);
         }

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="path">路径</string>
+  <string name="mimetype">类型</string>
+  <string name="resolution">分辨率</string>
+  <string name="exif">照片信息</string>
+  <string name="device">设备</string>
+  <string name="orientation">屏幕旋转</string>
+  <string name="location">位置</string>
+
+</resources>

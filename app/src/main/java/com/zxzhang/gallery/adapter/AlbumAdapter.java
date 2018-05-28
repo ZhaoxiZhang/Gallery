@@ -16,6 +16,7 @@ import com.bumptech.glide.Glide;
 import com.zxzhang.gallery.R;
 import com.zxzhang.gallery.activity.PhotoActivity;
 import com.zxzhang.gallery.data.AlbumBean;
+import com.zxzhang.gallery.data.MediaBean;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,7 +30,7 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder>{
     private static final String TAG = "AlbumAdapter";
     private Context mContext;
     private List<AlbumBean>mAlbumList;
-    private HashMap<String,List<String>>mAlbumMap;
+    private HashMap<String,List<MediaBean>>mAlbumMap;
 
     static class ViewHolder extends RecyclerView.ViewHolder{
         CardView albumView;
@@ -45,7 +46,7 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder>{
         }
     }
 
-    public AlbumAdapter(List<AlbumBean>albumList, HashMap<String,List<String>>albumMap){
+    public AlbumAdapter(List<AlbumBean>albumList, HashMap<String,List<MediaBean>>albumMap){
         mAlbumList = albumList;
         mAlbumMap = albumMap;
     }
@@ -63,13 +64,12 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder>{
             public void onClick(View v) {
                 int position = holder.getAdapterPosition();
                 String albumFolderName = mAlbumList.get(position).getAlbumFolderName();
-                Log.d(TAG, "onClick: zyzhangzyzhang " + albumFolderName);
-                List<String>photoPathList = mAlbumMap.get(albumFolderName);
 
-                Log.d(TAG, "onClick: AlbumAdapter " + photoPathList.size());
+                List<MediaBean>mediaList = mAlbumMap.get(albumFolderName);
+
                 Intent intent = new Intent(mContext, PhotoActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putStringArrayList("photoPathList",(ArrayList)photoPathList);
+                bundle.putParcelableArrayList("mediaList",(ArrayList)mediaList);
                 bundle.putString("albumFolderName",albumFolderName);
                 intent.putExtras(bundle);
                 mContext.startActivity(intent);

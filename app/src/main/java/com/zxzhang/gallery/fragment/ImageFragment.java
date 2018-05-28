@@ -2,7 +2,6 @@ package com.zxzhang.gallery.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,8 +9,6 @@ import android.view.ViewGroup;
 import com.bumptech.glide.Glide;
 import com.github.chrisbanes.photoview.PhotoView;
 import com.zxzhang.gallery.R;
-
-import static android.content.ContentValues.TAG;
 
 public class ImageFragment extends Fragment {
     private String mImagePath;

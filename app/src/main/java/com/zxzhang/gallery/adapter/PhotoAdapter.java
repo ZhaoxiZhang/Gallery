@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.zxzhang.gallery.R;
 import com.zxzhang.gallery.activity.ImageActivity;
+import com.zxzhang.gallery.data.MediaBean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +23,7 @@ import java.util.List;
  */
 
 public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ViewHolder>{
-    private List<String>mPhotoList;
+    private List<MediaBean>mMediaList;
     private Context mContext;
 
     static class ViewHolder extends RecyclerView.ViewHolder{
@@ -35,9 +36,9 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ViewHolder>{
         }
     }
 
-    public PhotoAdapter(Context context,List<String>photoList){
+    public PhotoAdapter(Context context,List<MediaBean>mediaList){
         mContext = context;
-        mPhotoList = photoList;
+        mMediaList = mediaList;
     }
 
     @Override
@@ -53,7 +54,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ViewHolder>{
                 Intent intent = new Intent(mContext, ImageActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putInt("position",position);
-                bundle.putStringArrayList("imagePathList",(ArrayList)mPhotoList);
+                bundle.putParcelableArrayList("mediaList",(ArrayList)mMediaList);
                 intent.putExtras(bundle);
                 mContext.startActivity(intent);
             }
@@ -64,12 +65,12 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ViewHolder>{
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Glide.with(mContext).load(mPhotoList.get(position)).into(holder.photoImage);
+        Glide.with(mContext).load(mMediaList.get(position).getPath()).into(holder.photoImage);
     }
 
     @Override
     public int getItemCount() {
-        return mPhotoList.size();
+        return mMediaList.size();
     }
 
 }
